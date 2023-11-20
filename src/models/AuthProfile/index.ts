@@ -5,6 +5,7 @@ import {
   PASSWORD_REGEX,
   USERNAME_REGEX,
 } from "@/utils/regex";
+import { USER_ENUMS } from "@/utils/enums";
 import bcrypt from "bcrypt";
 
 const AuthProfileSchema = new Schema({
@@ -61,8 +62,11 @@ const AuthProfileSchema = new Schema({
   role: {
     type: String,
     enum: {
-      values: ["coach", "trainee"],
+      values: USER_ENUMS.role,
     },
+  },
+  roleDocRef: {
+    type: String,
   },
 });
 

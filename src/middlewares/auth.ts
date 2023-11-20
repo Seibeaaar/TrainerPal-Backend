@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import AuthProfile from "@/models/AuthProfile";
 import { LOGIN_SCHEMA } from "@/utils/auth";
@@ -33,11 +33,16 @@ export const validateJWToken = async (
     if (!token) {
       return next("No token provided");
     }
-    jwt.verify(token, process.env.JWT_SECRET as string, (err) => {
-      if (err) {
+    jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+      if (err || !decoded) {
         res.statusCode = 403;
         return next("Invalid token");
       }
+      const { id } = decoded as JwtPayload;
+      res.locals = {
+        ...res.locals,
+        id,
+      };
       next();
     });
   } catch (e) {
@@ -76,7 +81,10 @@ export const validateLoginCredentials = async (
         if (err) return next("No user");
       });
     }
-    res.locals = profile;
+    res.locals = {
+      ...res.locals,
+      profile,
+    };
     next();
   } catch (e) {
     res.send(e);

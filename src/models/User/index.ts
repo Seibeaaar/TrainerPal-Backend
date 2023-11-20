@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { USER_ENUMS } from "@/utils/enums";
 
 export const USER_SCHEMA = {
   dateOfBirth: {
@@ -18,7 +19,7 @@ export const USER_SCHEMA = {
     type: String,
     required: true,
     enum: {
-      values: ["online", "offline"],
+      values: USER_ENUMS.preferredSite,
     },
   },
   bio: {

@@ -14,8 +14,7 @@ authRouter.post("/signUp", validateAuthProfile, async (req, res) => {
   try {
     const authProfile = new AuthProfile(req.body);
     await authProfile.save();
-    const { email } = req.body;
-    const token = generateJWToken(email);
+    const token = generateJWToken(authProfile.id);
     res.status(201).send({
       authProfile,
       token,
@@ -31,9 +30,10 @@ authRouter.post(
   validateLoginCredentials,
   async (req, res) => {
     try {
-      const token = generateJWToken(req.body.email);
+      const { profile } = res.locals;
+      const token = generateJWToken(profile.id);
       res.status(200).send({
-        authProfile: res.locals,
+        authProfile: profile,
         token,
       });
     } catch (e) {

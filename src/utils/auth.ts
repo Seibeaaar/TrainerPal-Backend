@@ -2,11 +2,10 @@ import jwt from "jsonwebtoken";
 import * as yup from "yup";
 import { PASSWORD_REGEX } from "./regex";
 
-export const generateJWToken = (email: string) => {
+export const generateJWToken = (id: string) => {
   return jwt.sign(
     {
-      data: email,
-      // Expires after 4 hours
+      id,
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 4,
     },
     process.env.JWT_SECRET as string,
