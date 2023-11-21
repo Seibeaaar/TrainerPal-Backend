@@ -1,34 +1,33 @@
 import { Router } from "express";
 import { validateJWToken } from "@/middlewares/auth";
-import Trainee from "@/models/Trainee";
 import AuthProfile from "@/models/AuthProfile";
-
-import { validateTraineeCreate } from "@/middlewares/trainee";
+import Coach from "@/models/Coach";
+import { validateCoachCreate } from "@/middlewares/coach";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
 
-const traineeRouter = Router();
+const coachRouter = Router();
 
-traineeRouter.post(
+coachRouter.post(
   "/create",
   validateJWToken,
-  validateTraineeCreate,
+  validateCoachCreate,
   async (req, res) => {
     try {
-      const trainee = new Trainee(req.body);
-      await trainee.save();
+      const coach = new Coach(req.body);
+      await coach.save();
       const authProfile = await AuthProfile.findByIdAndUpdate(
         res.locals.id,
         {
-          role: "trainee",
-          roleDocRef: trainee.id,
+          role: "coach",
+          roleDocRef: coach.id,
         },
         {
           new: true,
         },
       );
       res.status(200).send({
+        fitnesProfile: coach,
         authProfile,
-        fitnessProfile: trainee,
       });
     } catch (e) {
       res.status(500).send(DEFAULT_SERVER_ERROR);
@@ -36,4 +35,4 @@ traineeRouter.post(
   },
 );
 
-export default traineeRouter;
+export default coachRouter;
