@@ -1,8 +1,6 @@
 import { Router } from "express";
 import AuthProfile from "@/models/AuthProfile";
 import { generateJWToken } from "@/utils/auth";
-import { validateJWToken } from "@/middlewares/auth";
-import Trainee from "@/models/Trainee";
 
 import {
   validateAuthProfile,
@@ -44,17 +42,5 @@ authRouter.post(
     }
   },
 );
-
-authRouter.delete("/delete", validateJWToken, async (req, res) => {
-  try {
-    const authProfile = await AuthProfile.findById(res.locals.id);
-    const fitnessProfile = await Trainee.findById(authProfile?.roleDocRef);
-    await authProfile?.deleteOne();
-    await fitnessProfile?.deleteOne();
-    res.status(200).send({});
-  } catch (e) {
-    res.status(500).send(DEFAULT_SERVER_ERROR);
-  }
-});
 
 export default authRouter;
