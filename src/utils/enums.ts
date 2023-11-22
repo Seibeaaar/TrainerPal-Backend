@@ -1,3 +1,8 @@
+export const WORKOUT_ENUMS = {
+  site: ["online", "offline"],
+  accessMode: ["private", "public"],
+};
+
 export const USER_ENUMS = {
   preferredSite: ["online", "offline"],
   role: ["coach", "trainee"],

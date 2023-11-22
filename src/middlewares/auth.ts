@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import AuthProfile from "@/models/AuthProfile";
+import AuthProfile from "@/models/User/AuthProfile";
 import { LOGIN_SCHEMA } from "@/utils/auth";
 
 export const validateAuthProfile = async (

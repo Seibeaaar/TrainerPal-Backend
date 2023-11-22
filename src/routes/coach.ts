@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validateJWToken } from "@/middlewares/auth";
-import AuthProfile from "@/models/AuthProfile";
-import Coach from "@/models/Coach";
+import AuthProfile from "@/models/User/AuthProfile";
+import Coach from "@/models/User/Coach";
 import { validateCoachCreate } from "@/middlewares/coach";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
 

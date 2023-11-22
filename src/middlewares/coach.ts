@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Coach from "@/models/Coach";
+import Coach from "@/models/User/Coach";
 
 export const validateCoachCreate = async (
   req: Request,

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { USER_SCHEMA } from "../User";
+import { USER_SCHEMA } from "./utils";
 import { TRAINEE_ENUMS } from "@/utils/enums";
 
 const TRAINEE_SCHEMA = new Schema({

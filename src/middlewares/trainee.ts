@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Trainee from "@/models/Trainee";
+import Trainee from "@/models/User/Trainee";
 
 export const validateTraineeCreate = async (
   req: Request,

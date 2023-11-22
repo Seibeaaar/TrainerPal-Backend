@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { USER_SCHEMA } from "../User";
+import { USER_SCHEMA } from "./utils";
 import { COACH_ENUMS } from "@/utils/enums";
 
 const COACH_SCHEMA = new Schema({
