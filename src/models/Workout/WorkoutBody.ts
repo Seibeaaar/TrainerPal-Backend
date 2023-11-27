@@ -28,6 +28,26 @@ const WorkoutBodySchema = new Schema({
       values: WORKOUT_ENUMS.accessMode,
     },
   },
+  exercises: [
+    {
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: "Exercise",
+        required: true,
+      },
+      sets: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
+      // In case of exercises on time - number of seconds
+      reps: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
+    },
+  ],
 });
 
 export default model("WorkoutBody", WorkoutBodySchema);

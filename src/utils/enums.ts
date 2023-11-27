@@ -16,3 +16,8 @@ export const TRAINEE_ENUMS = {
 export const COACH_ENUMS = {
   field: ["bodybuilding", "strongman", "powerlifting", "yoga", "crossfit"],
 };
+
+// Only for pairs like offline-online
+export const toggleValue = (currentValue: string, values: string[]) => {
+  return values.find((v) => v !== currentValue);
+};

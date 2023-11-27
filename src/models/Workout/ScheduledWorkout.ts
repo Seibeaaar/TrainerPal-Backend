@@ -13,15 +13,18 @@ const ScheduledWorkoutSchema = new Schema({
   coach: {
     type: Schema.Types.ObjectId,
     ref: "Coach",
+    required: true,
   },
   workout: {
     type: Schema.Types.ObjectId,
     ref: "Workout",
+    required: true,
   },
   trainees: [
     {
       type: Schema.Types.ObjectId,
       ref: "Trainee",
+      required: true,
     },
   ],
 });

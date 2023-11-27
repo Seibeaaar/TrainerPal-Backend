@@ -15,9 +15,9 @@ const COACH_SCHEMA = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "Trainee",
   },
-  workouts: {
+  authoredWorkouts: {
     type: [Schema.Types.ObjectId],
-    ref: "Workout",
+    ref: "WorkoutBody",
   },
 });
 

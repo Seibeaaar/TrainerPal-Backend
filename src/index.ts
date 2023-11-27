@@ -6,6 +6,7 @@ import { connectToDatabase } from "./utils/db";
 import authRouter from "./routes/auth";
 import traineeRouter from "./routes/trainee";
 import coachRouter from "./routes/coach";
+import workoutRouter from "./routes/workout";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/trainee", traineeRouter);
 app.use("/coach", coachRouter);
+app.use("/workouts", workoutRouter);
 
 connectToDatabase();
 
