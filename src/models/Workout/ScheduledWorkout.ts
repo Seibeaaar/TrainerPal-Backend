@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import dayjs from "dayjs";
+import { WORKOUT_ENUMS } from "@/utils/enums";
 
 const ScheduledWorkoutSchema = new Schema({
   date: {
@@ -27,6 +28,13 @@ const ScheduledWorkoutSchema = new Schema({
       required: true,
     },
   ],
+  site: {
+    type: String,
+    required: true,
+    enum: {
+      values: WORKOUT_ENUMS.site,
+    },
+  },
 });
 
 export default model("ScheduledWorkout", ScheduledWorkoutSchema);

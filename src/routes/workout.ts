@@ -59,4 +59,24 @@ workoutRouter.put(
   },
 );
 
+workoutRouter.delete(
+  "/delete",
+  validateJWToken,
+  validateCoachRole,
+  validateWorkoutIsPresent,
+  validateIfWorkoutAuthor,
+  async (req, res) => {
+    try {
+      const { coach, workout } = res.locals;
+      await workout.deleteOne();
+      await coach.updateOne({
+        $pull: { authoredWorkouts: workout.id },
+      });
+      res.status(200).send({});
+    } catch (e) {
+      res.status(500).send(DEFAULT_SERVER_ERROR);
+    }
+  },
+);
+
 export default workoutRouter;
