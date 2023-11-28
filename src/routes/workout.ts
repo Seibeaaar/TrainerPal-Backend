@@ -4,11 +4,14 @@ import {
   validateCoachRole,
   validateIfWorkoutAuthor,
   validateWorkoutIsPresent,
+  validateScheduleWorkout,
 } from "@/middlewares/workout";
+import { validateTraineesArePresent } from "@/middlewares/trainee";
 import { validateJWToken } from "@/middlewares/auth";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
 
 import WorkoutBody from "@/models/Workout/WorkoutBody";
+import ScheduledWorkout from "@/models/Workout/ScheduledWorkout";
 import { WORKOUT_ENUMS, toggleValue } from "@/utils/enums";
 
 const workoutRouter = Router();
@@ -26,11 +29,9 @@ workoutRouter.post(
         author: coach.id,
       });
       await workoutBody.save();
-      const authoredWorkouts = (coach.authoredWorkouts || []).concat(
-        workoutBody.id,
-      );
-      coach.authoredWorkouts = authoredWorkouts;
-      await coach.save();
+      await coach.updateOne({
+        $addToSet: { authoredWorkouts: workoutBody.id },
+      });
       res.status(200).send(workoutBody);
     } catch (e) {
       res.status(500).send(DEFAULT_SERVER_ERROR);
@@ -73,6 +74,37 @@ workoutRouter.delete(
         $pull: { authoredWorkouts: workout.id },
       });
       res.status(200).send({});
+    } catch (e) {
+      res.status(500).send(DEFAULT_SERVER_ERROR);
+    }
+  },
+);
+
+workoutRouter.post(
+  "/schedule",
+  validateJWToken,
+  validateCoachRole,
+  validateWorkoutIsPresent,
+  validateIfWorkoutAuthor,
+  validateScheduleWorkout,
+  validateTraineesArePresent,
+  async (req, res) => {
+    try {
+      const { coach, trainees } = res.locals;
+      const scheduledWorkout = new ScheduledWorkout({
+        ...req.body,
+        coach: coach.id,
+      });
+      await scheduledWorkout.save();
+      await coach.updateOne({
+        $addToSet: { scheduledWorkouts: scheduledWorkout.id },
+      });
+      for (const trainee of trainees) {
+        await trainee.updateOne({
+          $addToSet: { workouts: scheduledWorkout.id },
+        });
+      }
+      res.status(200).send(scheduledWorkout);
     } catch (e) {
       res.status(500).send(DEFAULT_SERVER_ERROR);
     }

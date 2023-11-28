@@ -8,3 +8,9 @@ export interface WorkoutBodyType {
   accessMode: WorkoutAccessMode;
   exercises: string[];
 }
+
+export interface WorkoutExerciseType {
+  id: string;
+  reps: number;
+  sets: number;
+}

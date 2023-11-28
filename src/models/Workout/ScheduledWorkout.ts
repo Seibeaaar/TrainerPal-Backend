@@ -7,27 +7,34 @@ const ScheduledWorkoutSchema = new Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v: string) => dayjs(v).isValid(),
+      validator: (v: string) => {
+        const isValid = dayjs(v).isValid();
+        if (!isValid) return false;
+        return dayjs() < dayjs(v);
+      },
       message: "Invalid workout date",
     },
   },
   coach: {
     type: Schema.Types.ObjectId,
     ref: "Coach",
-    required: true,
   },
   workout: {
     type: Schema.Types.ObjectId,
     ref: "Workout",
     required: true,
   },
-  trainees: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Trainee",
-      required: true,
-    },
-  ],
+  trainees: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Trainee",
+        required: true,
+      },
+    ],
+    required: true,
+    validate: (v: string[]) => Array.isArray(v) && v.length > 0,
+  },
   site: {
     type: String,
     required: true,

@@ -19,6 +19,10 @@ const COACH_SCHEMA = new Schema({
     type: [Schema.Types.ObjectId],
     ref: "WorkoutBody",
   },
+  scheduledWorkouts: {
+    type: [Schema.Types.ObjectId],
+    ref: "ScheduledWorkout",
+  },
 });
 
 export default model("Coach", COACH_SCHEMA);

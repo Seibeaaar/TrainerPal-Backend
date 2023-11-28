@@ -36,7 +36,7 @@ export const validateWorkoutIsPresent = async (
   next: NextFunction,
 ) => {
   try {
-    const workout = await WorkoutBody.findById(req.body.id);
+    const workout = await WorkoutBody.findById(req.body.workout);
     if (!workout) {
       res.statusCode = 400;
       next("No workout with id found");
@@ -58,7 +58,7 @@ export const validateIfWorkoutAuthor = async (
 ) => {
   try {
     const { coach } = res.locals;
-    const workoutId = req.body.id;
+    const workoutId = req.body.workout;
     if (!coach.authoredWorkouts.includes(workoutId)) {
       res.statusCode = 403;
       next("You are not allowed to change this workout");
