@@ -1,6 +1,7 @@
 export const WORKOUT_ENUMS = {
   site: ["online", "offline"],
   accessMode: ["private", "public"],
+  scheduleStatus: ["pending", "accepted", "declined", "amendment"],
 };
 
 export const USER_ENUMS = {

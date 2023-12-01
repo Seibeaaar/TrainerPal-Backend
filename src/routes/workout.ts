@@ -1,18 +1,19 @@
 import { Router } from "express";
 import {
   validateWorkoutBody,
-  validateCoachRole,
   validateIfWorkoutAuthor,
   validateWorkoutIsPresent,
-  validateScheduleWorkout,
-} from "@/middlewares/workout";
-import { validateTraineesArePresent } from "@/middlewares/trainee";
+} from "@/middlewares/workouts/body";
+import { validateScheduleWorkout } from "@/middlewares/workouts/scheduled";
+import { validateTraineeIsPresent } from "@/middlewares/trainee";
 import { validateJWToken } from "@/middlewares/auth";
+import { validateCoachRole } from "@/middlewares/coach";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
 
 import WorkoutBody from "@/models/Workout/WorkoutBody";
 import ScheduledWorkout from "@/models/Workout/ScheduledWorkout";
 import { WORKOUT_ENUMS, toggleValue } from "@/utils/enums";
+import { ScheduleStatus } from "@/types/enums";
 
 const workoutRouter = Router();
 
@@ -85,25 +86,20 @@ workoutRouter.post(
   validateJWToken,
   validateCoachRole,
   validateWorkoutIsPresent,
-  validateIfWorkoutAuthor,
   validateScheduleWorkout,
-  validateTraineesArePresent,
+  validateTraineeIsPresent,
   async (req, res) => {
     try {
-      const { coach, trainees } = res.locals;
+      const { coach } = res.locals;
       const scheduledWorkout = new ScheduledWorkout({
         ...req.body,
         coach: coach.id,
+        status: ScheduleStatus.pending,
       });
       await scheduledWorkout.save();
       await coach.updateOne({
         $addToSet: { scheduledWorkouts: scheduledWorkout.id },
       });
-      for (const trainee of trainees) {
-        await trainee.updateOne({
-          $addToSet: { workouts: scheduledWorkout.id },
-        });
-      }
       res.status(200).send(scheduledWorkout);
     } catch (e) {
       res.status(500).send(DEFAULT_SERVER_ERROR);

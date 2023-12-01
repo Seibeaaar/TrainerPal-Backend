@@ -24,22 +24,22 @@ const ScheduledWorkoutSchema = new Schema({
     ref: "Workout",
     required: true,
   },
-  trainees: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Trainee",
-        required: true,
-      },
-    ],
+  trainee: {
+    type: Schema.Types.ObjectId,
+    ref: "Trainee",
     required: true,
-    validate: (v: string[]) => Array.isArray(v) && v.length > 0,
   },
   site: {
     type: String,
     required: true,
     enum: {
       values: WORKOUT_ENUMS.site,
+    },
+  },
+  status: {
+    type: String,
+    enum: {
+      values: WORKOUT_ENUMS.scheduleStatus,
     },
   },
 });
