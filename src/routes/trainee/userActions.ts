@@ -1,0 +1,51 @@
+import { Router } from "express";
+import { validateJWToken } from "@/middlewares/auth";
+import Trainee from "@/models/User/Trainee";
+import AuthProfile from "@/models/User/AuthProfile";
+
+import { validateTraineeCreate } from "@/middlewares/trainee";
+import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
+
+const traineeUserRouter = Router();
+
+traineeUserRouter.post(
+  "/create",
+  validateJWToken,
+  validateTraineeCreate,
+  async (req, res) => {
+    try {
+      const trainee = new Trainee(req.body);
+      await trainee.save();
+      const authProfile = await AuthProfile.findByIdAndUpdate(
+        res.locals.id,
+        {
+          role: "trainee",
+          roleDocRef: trainee.id,
+        },
+        {
+          new: true,
+        },
+      );
+      res.status(200).send({
+        authProfile,
+        fitnessProfile: trainee,
+      });
+    } catch (e) {
+      res.status(500).send(DEFAULT_SERVER_ERROR);
+    }
+  },
+);
+
+traineeUserRouter.delete("/delete", validateJWToken, async (req, res) => {
+  try {
+    const authProfile = await AuthProfile.findById(res.locals.id);
+    const trainee = await Trainee.findById(authProfile?.roleDocRef);
+    await authProfile?.deleteOne();
+    await trainee?.deleteOne();
+    res.status(200).send({});
+  } catch (e) {
+    res.status(500).send(DEFAULT_SERVER_ERROR);
+  }
+});
+
+export default traineeUserRouter;

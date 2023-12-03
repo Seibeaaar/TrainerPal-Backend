@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Trainee from "@/models/User/Trainee";
+import AuthProfile from "@/models/User/AuthProfile";
 
 export const validateTraineeCreate = async (
   req: Request,
@@ -25,6 +26,32 @@ export const validateTraineeIsPresent = async (
     next();
   } catch (e) {
     res.status(400).send(e);
+  }
+};
+
+export const validateTraineeRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const authProfile = await AuthProfile.findById(res.locals.id);
+    if (authProfile?.role !== "trainee") {
+      res.statusCode = 403;
+      next("Request can only be made by a trainee");
+    }
+    const trainee = await Trainee.findById(authProfile?.roleDocRef);
+    if (!trainee) {
+      res.statusCode = 400;
+      next("No trainee found");
+    }
+    res.locals = {
+      ...res.locals,
+      trainee,
+    };
+    next();
+  } catch (e) {
+    res.send(e);
   }
 };
 

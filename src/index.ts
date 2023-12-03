@@ -4,9 +4,10 @@ import dotenv from "dotenv";
 import { connectToDatabase } from "./utils/db";
 
 import authRouter from "./routes/auth";
-import traineeRouter from "./routes/trainee";
-import coachRouter from "./routes/coach";
-import workoutRouter from "./routes/workout";
+import traineeUserRouter from "./routes/trainee/userActions";
+import coachUserRouter from "./routes/coach/userActions";
+import coachWorkoutRouter from "./routes/coach/workoutActions";
+import traineeWorkoutRouter from "./routes/trainee/workoutActions";
 
 const app = express();
 
@@ -15,10 +16,13 @@ dotenv.config();
 app.use(helmet());
 app.use(express.json());
 app.use("/auth", authRouter);
-app.use("/trainee", traineeRouter);
-app.use("/coach", coachRouter);
-app.use("/workouts", workoutRouter);
+
+app.use("/trainee/user", traineeUserRouter);
+app.use("/trainee/workouts", traineeWorkoutRouter);
+
+app.use("/coach/user", coachUserRouter);
+app.use("/coach/workouts", coachWorkoutRouter);
 
 connectToDatabase();
 
-app.listen(5001, () => console.log("Sho to tam"));
+app.listen(5001);

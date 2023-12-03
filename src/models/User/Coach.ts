@@ -20,8 +20,18 @@ const COACH_SCHEMA = new Schema({
     ref: "WorkoutBody",
   },
   scheduledWorkouts: {
-    type: [Schema.Types.ObjectId],
-    ref: "ScheduledWorkout",
+    type: [
+      {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: "ScheduledWorkout",
+        },
+        completed: {
+          type: Boolean,
+        },
+        _id: false,
+      },
+    ],
   },
 });
 

@@ -23,8 +23,18 @@ const TRAINEE_SCHEMA = new Schema({
     ref: "Coach",
   },
   workouts: {
-    type: [Schema.Types.ObjectId],
-    ref: "Workout",
+    type: [
+      {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: "ScheduledWorkout",
+        },
+        completed: {
+          type: Boolean,
+        },
+        _id: false,
+      },
+    ],
   },
   challenges: {
     type: [Schema.Types.ObjectId],

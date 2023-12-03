@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import { WORKOUT_ENUMS } from "@/utils/enums";
-import { WorkoutExerciseType } from "@/types/workouts";
 
 const WorkoutBodySchema = new Schema({
   author: {
@@ -17,7 +16,6 @@ const WorkoutBodySchema = new Schema({
   },
   accessMode: {
     type: String,
-    required: true,
     enum: {
       values: WORKOUT_ENUMS.accessMode,
     },
@@ -26,9 +24,9 @@ const WorkoutBodySchema = new Schema({
     type: [
       {
         id: {
-          type: Schema.Types.ObjectId,
           ref: "Exercise",
           required: true,
+          type: Schema.Types.ObjectId,
         },
         sets: {
           type: Number,
@@ -43,8 +41,6 @@ const WorkoutBodySchema = new Schema({
         },
       },
     ],
-    required: true,
-    validate: (v: WorkoutExerciseType[]) => Array.isArray(v) && v.length > 0,
   },
 });
 
