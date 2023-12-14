@@ -5,9 +5,9 @@ import Coach from "@/models/User/Coach";
 import { validateCoachCreate } from "@/middlewares/coach";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
 
-const coachRouter = Router();
+const coachUserRouter = Router();
 
-coachRouter.post(
+coachUserRouter.post(
   "/create",
   validateJWToken,
   validateCoachCreate,
@@ -35,7 +35,7 @@ coachRouter.post(
   },
 );
 
-coachRouter.delete("/delete", validateJWToken, async (req, res) => {
+coachUserRouter.delete("/delete", validateJWToken, async (req, res) => {
   try {
     const authProfile = await AuthProfile.findById(res.locals.id);
     const coach = await Coach.findById(authProfile?.roleDocRef);
@@ -47,4 +47,4 @@ coachRouter.delete("/delete", validateJWToken, async (req, res) => {
   }
 });
 
-export default coachRouter;
+export default coachUserRouter;

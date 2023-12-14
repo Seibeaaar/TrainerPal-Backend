@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { USER_SCHEMA } from "../User";
+import { USER_SCHEMA } from "./utils";
 import { TRAINEE_ENUMS } from "@/utils/enums";
 
 const TRAINEE_SCHEMA = new Schema({
@@ -23,8 +23,18 @@ const TRAINEE_SCHEMA = new Schema({
     ref: "Coach",
   },
   workouts: {
-    type: [Schema.Types.ObjectId],
-    ref: "Workout",
+    type: [
+      {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: "ScheduledWorkout",
+        },
+        completed: {
+          type: Boolean,
+        },
+        _id: false,
+      },
+    ],
   },
   challenges: {
     type: [Schema.Types.ObjectId],

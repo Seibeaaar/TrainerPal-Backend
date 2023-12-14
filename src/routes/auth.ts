@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AuthProfile from "@/models/AuthProfile";
+import AuthProfile from "@/models/User/AuthProfile";
 import { generateJWToken } from "@/utils/auth";
 
 import {

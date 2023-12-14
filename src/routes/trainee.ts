@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validateJWToken } from "@/middlewares/auth";
-import Trainee from "@/models/Trainee";
-import AuthProfile from "@/models/AuthProfile";
+import Trainee from "@/models/User/Trainee";
+import AuthProfile from "@/models/User/AuthProfile";
 
 import { validateTraineeCreate } from "@/middlewares/trainee";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";

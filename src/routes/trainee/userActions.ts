@@ -1,33 +1,34 @@
 import { Router } from "express";
 import { validateJWToken } from "@/middlewares/auth";
+import Trainee from "@/models/User/Trainee";
 import AuthProfile from "@/models/User/AuthProfile";
-import Coach from "@/models/User/Coach";
-import { validateCoachCreate } from "@/middlewares/coach";
+
+import { validateTraineeCreate } from "@/middlewares/trainee";
 import { DEFAULT_SERVER_ERROR } from "@/utils/constants";
 
-const coachRouter = Router();
+const traineeUserRouter = Router();
 
-coachRouter.post(
+traineeUserRouter.post(
   "/create",
   validateJWToken,
-  validateCoachCreate,
+  validateTraineeCreate,
   async (req, res) => {
     try {
-      const coach = new Coach(req.body);
-      await coach.save();
+      const trainee = new Trainee(req.body);
+      await trainee.save();
       const authProfile = await AuthProfile.findByIdAndUpdate(
         res.locals.id,
         {
-          role: "coach",
-          roleDocRef: coach.id,
+          role: "trainee",
+          roleDocRef: trainee.id,
         },
         {
           new: true,
         },
       );
       res.status(200).send({
-        fitnesProfile: coach,
         authProfile,
+        fitnessProfile: trainee,
       });
     } catch (e) {
       res.status(500).send(DEFAULT_SERVER_ERROR);
@@ -35,16 +36,16 @@ coachRouter.post(
   },
 );
 
-coachRouter.delete("/delete", validateJWToken, async (req, res) => {
+traineeUserRouter.delete("/delete", validateJWToken, async (req, res) => {
   try {
     const authProfile = await AuthProfile.findById(res.locals.id);
-    const coach = await Coach.findById(authProfile?.roleDocRef);
+    const trainee = await Trainee.findById(authProfile?.roleDocRef);
     await authProfile?.deleteOne();
-    await coach?.deleteOne();
+    await trainee?.deleteOne();
     res.status(200).send({});
   } catch (e) {
     res.status(500).send(DEFAULT_SERVER_ERROR);
   }
 });
 
-export default coachRouter;
+export default traineeUserRouter;
